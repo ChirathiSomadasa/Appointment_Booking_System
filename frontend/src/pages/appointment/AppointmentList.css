@@ -1,0 +1,115 @@
+/* General Styles */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
+}
+
+/* Container */
+.appointment-list-container {
+  width: 90%;
+  max-width: 800px;
+  background: white;
+  padding: 20px;
+  margin: 30px auto;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  text-align: center;
+}
+
+/* Search Bar */
+.search-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  position: relative;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.search-container input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 10px;
+  font-size: 16px;
+}
+
+.search-icon {
+  color: gray;
+  cursor: pointer;
+}
+
+/* Table */
+.appointment-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.appointment-table th, .appointment-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+
+.appointment-table th {
+  background: #007bff;
+  color: white;
+}
+
+.appointment-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+/* Buttons */
+.edit-btn, .delete-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  border-radius: 5px;
+}
+
+.edit-btn {
+  background-color: #ffc107;
+  color: black;
+  margin-right: 5px;
+}
+
+.delete-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+/* Hover Effects */
+.edit-btn:hover {
+  background-color: #e0a800;
+}
+
+.delete-btn:hover {
+  background-color: #c82333;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .appointment-list-container {
+    width: 95%;
+    padding: 15px;
+  }
+
+  .appointment-table th, .appointment-table td {
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  .edit-btn, .delete-btn {
+    font-size: 12px;
+    padding: 5px 8px;
+  }
+}

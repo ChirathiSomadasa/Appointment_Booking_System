@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Notifications, Menu, Close } from "@mui/icons-material";
+import { Notifications, Menu, Close, AccountCircle } from "@mui/icons-material";
 import "./Header.css";
 
 function Header() {
@@ -19,11 +19,18 @@ function Header() {
         </div>
 
         <div className="nav-right">
+
           <Link to="/register" className="nav-item">Signup</Link>
           <Link to="/login" className="nav-item">Login</Link>
+          <Link to="/logout" className="nav-item">Logout</Link>
+          <Link to="/profile" className="icon">
+            <AccountCircle />
+          </Link>
           <Link to="/notifications" className="icon">
             <Notifications />
-          </Link>
+          </Link>         
+         
+    
         </div>
 
         {/* Mobile Menu Button */}
@@ -37,10 +44,16 @@ function Header() {
         <div className="mobile-menu">
           <Link to="/" onClick={() => setIsOpen(false)}>Home</Link>
           <Link to="/appointment" onClick={() => setIsOpen(false)}>Appointment</Link>
+          
+          
           <Link to="/register" onClick={() => setIsOpen(false)}>Signup</Link>
           <Link to="/login" onClick={() => setIsOpen(false)}>Login</Link>
+          <Link to="/logout" onClick={() => setIsOpen(false)}>Logout</Link>
+          <Link to="/profile" onClick={() => setIsOpen(false)}>
+            <AccountCircle /> Profile
+          </Link>
           <Link to="/notifications" onClick={() => setIsOpen(false)}>
-            <Notifications />
+            <Notifications /> Notifications
           </Link>
         </div>
       )}
