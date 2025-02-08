@@ -6,6 +6,7 @@ import Login from './pages/login/Login';
 import Appointment from './pages/appointment/Appointment';
 import AppointmentList from './pages/appointment/AppointmentList';
 import EditAppointment from './pages/appointment/EditAppointment';
+import Admin from './pages/admin/Admin';
 
 
 function App() {
@@ -13,12 +14,13 @@ function App() {
     <BrowserRouter>
       <Header />
       <Routes>
-      <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home />} />
         <Route path="/register" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
         <Route path="/appointment" element={<Appointment />} />
         <Route path="/appointmentList" element={<AppointmentList />} />
         <Route path="/appointmentEdit" element={<EditAppointment />} />
+        <Route path="/admin" element={<Admin />} />
       </Routes>
      
     </BrowserRouter>
