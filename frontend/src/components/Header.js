@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Notifications, Menu, Close, AccountCircle } from "@mui/icons-material";
 import "./Header.css";
-import useLogout from "../hooks/useLogout"; 
+import UseLogout from "../hooks/UseLogout"; 
 
 function Header() {
-  const logout = useLogout(); // Use the logout hook
+  const logout = UseLogout(); // Use the logout hook
   const [isOpen, setIsOpen] = useState(false);
 
   // Check if the user is logged in by verifying the presence of a token in localStorage

@@ -1,7 +1,7 @@
 // hooks/useLogout.js
 import { useNavigate } from "react-router-dom";
 
-function useLogout (){
+function UseLogout (){
   const navigate = useNavigate();
 
   const logout = () => {
@@ -16,4 +16,4 @@ function useLogout (){
   return logout;
 };
 
-export default useLogout;
+export default UseLogout;

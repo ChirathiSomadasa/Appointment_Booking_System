@@ -1,10 +1,5 @@
-/*const jwt = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
 require("dotenv").config();
-
-// Generate JWT token
-function generateJWT(user) {
-  return jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "1h" });
-}
 
 // Verify JWT token
 function verifyJWT(token) {
@@ -14,9 +9,6 @@ function verifyJWT(token) {
     return null;
   }
 }
-
-module.exports = { generateJWT, verifyJWT };*/
-const jwt = require("jsonwebtoken");
 
 const generateJWT = (user) => {
   const payload = {
@@ -35,4 +27,4 @@ const generateJWT = (user) => {
   return jwt.sign(payload, secret, { expiresIn: "1h" });
 };
 
-module.exports = { generateJWT };
+module.exports = { generateJWT, verifyJWT };

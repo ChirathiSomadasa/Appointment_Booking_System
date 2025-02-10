@@ -1,9 +1,9 @@
 import React from "react";
-import useAuth from "../../hooks/useAuth";
+import UseAuth from "../../hooks/UseAuth";
 
 function Home() {
 
-  useAuth();
+  UseAuth();
 
   return (
   <div>Home</div>

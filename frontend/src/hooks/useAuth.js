@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-function useAuth () {
+function UseAuth() {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
@@ -10,6 +10,6 @@ function useAuth () {
       navigate("/login", { replace: true });
     }
   }, [token, navigate]);
-};
+}
 
-export default useAuth;
+export default UseAuth;

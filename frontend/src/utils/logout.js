@@ -1,7 +1,7 @@
 // utils/logout.js
 import { useNavigate } from "react-router-dom";
 
-export const logout = () => {
+export const Logout = () => {
   const navigate = useNavigate();
 
   // Clear token and role from localStorage
