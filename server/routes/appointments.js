@@ -20,7 +20,7 @@ router.get("/:id", (req, res) => {
 });
 
 // Book an appointment
-router.post("/", (req, res) => {
+router.post("/create", (req, res) => {
 
   console.log(req.user);
 
@@ -55,37 +55,47 @@ router.post("/", (req, res) => {
   );
 });
 
-// Update an appointment
-router.put("/:id", (req, res) => {
-    const { name, contact_no, appointment_date, time_slot } = req.body;
-    const appointmentId = req.params.id;
-  
-    // Check if the time slot is already booked for another appointment
-    db.query(
-      "SELECT * FROM appointments WHERE appointment_date = ? AND time_slot = ? AND id != ?",
-      [appointment_date, time_slot, appointmentId],
-      (err, results) => {
-        if (err) return res.status(500).json({ message: "Server error" });
-  
-        if (results.length > 0) {
-          return res.status(400).json({ message: "This time slot is already booked" });
-        }
-  
-        // Update the appointment
-        db.query(
-          "UPDATE appointments SET name = ?, contact_no = ?, appointment_date = ?, time_slot = ? WHERE id = ?",
-          [name, contact_no, appointment_date, time_slot, appointmentId],
-          (updateErr) => {
-            if (updateErr) return res.status(500).json({ message: "Server error" });
-            res.json({ message: "Appointment updated successfully" });
-          }
-        );
+// get appointment by id
+router.get("/get/:id", (req, res) => {
+  const appointmentId = req.params.id;
+  db.query(
+    "SELECT * FROM appointments WHERE id = ?",
+    [appointmentId],
+    (err, results) => {
+      if (err) return res.status(500).json({ message: "Server error" });
+      if (results.length === 0) return res.status(404).json({ message: "Appointment not found" });
+
+      // Ensure the date is returned in YYYY-MM-DD format
+      const appointment = results[0];
+      if (appointment.appointment_date) {
+        appointment.appointment_date = new Date(appointment.appointment_date).toISOString().split('T')[0];
       }
-    );
-  });
+
+      res.json(appointment); // Return the first result
+    }
+  );
+});
+
+//update appointment
+router.put("/update/:id", (req, res) => {
+  const appointmentId = req.params.id;
+  const { name, email, contact_no, appointment_date, time_slot } = req.body;
+
+  db.query(
+    "UPDATE appointments SET name = ?, email = ?, contact_no = ?, appointment_date = ?, time_slot = ? WHERE id = ?",
+    [name, email, contact_no, appointment_date, time_slot, appointmentId],
+    (err, results) => {
+      if (err) return res.status(500).json({ message: "Server error" });
+      if (results.affectedRows === 0) return res.status(404).json({ message: "Appointment not found" });
+
+      res.json({ message: "Appointment updated successfully" });
+    }
+  );
+});
+
 
 // Delete an appointment
-router.delete("/:id", (req, res) => {
+router.delete("/delete/:id", (req, res) => {
   const appointmentId = req.params.id;
 
   db.query("DELETE FROM appointments WHERE id = ?", [appointmentId], (err) => {

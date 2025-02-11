@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./Appointment.css";
-import heroImage from "../../images/img3.jpg"; // Adjust the path as needed
+import heroImage from "../../images/img3.jpg"; 
 import { useNavigate } from 'react-router-dom';
+import { useMemo } from "react";
 
 const timeSlots = [
   "8:00 AM - 9:00 AM",
@@ -27,7 +28,21 @@ function Appointment() {
   });
 
   const [availableSlots, setAvailableSlots] = useState([]);
-  const user = JSON.parse(localStorage.getItem("user")); // Retrieve logged-in user details
+  
+  // Retrieve logged-in user details from localStorage
+  const user = useMemo(() => JSON.parse(localStorage.getItem("user")), []);
+
+  // Auto-fill name and email if user is logged in
+  useEffect(() => {
+    if (user) {
+      setFormData((prevData) => ({
+        ...prevData,
+        name: user.name || "",  // Auto-fill name
+        email: user.email || "" // Auto-fill email
+      }));
+    }
+  }, [user]);
+
   // Fetch available time slots when the date changes
   useEffect(() => {
     if (formData.appointment_date) {
@@ -66,7 +81,7 @@ function Appointment() {
     console.log(localStorage.getItem("user"));
 
     try {
-      await axios.post("http://localhost:5000/appointments", {
+      await axios.post("http://localhost:5000/appointments/create", {
         ...formData
       },{
         headers:{

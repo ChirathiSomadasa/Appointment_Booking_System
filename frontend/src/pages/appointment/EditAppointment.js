@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import "./Appointment.css";
+import heroImage from "../../images/img3.jpg";
 
 const timeSlots = [
   "8:00 AM - 9:00 AM",
@@ -18,24 +19,68 @@ function EditAppointment() {
   const { id } = useParams();
   const [formData, setFormData] = useState({
     name: "",
+    email: "",
     contact_no: "",
     appointment_date: "",
     time_slot: ""
   });
+  const [availableSlots, setAvailableSlots] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchAppointmentDetails();
-  }, []);
+  }, [id]);
 
   const fetchAppointmentDetails = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/appointments/${id}`);
-      setFormData(response.data);
+      const response = await axios.get(`http://localhost:5000/appointments/get/${id}`, {
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem("token")
+        }
+      });
+      console.log("API Response:", response.data);
+
+      // Format the date if necessary
+      const formattedData = {
+        ...response.data,
+        appointment_date: formatDate(response.data.appointment_date)
+      };
+
+      setFormData(formattedData);
     } catch (error) {
-      console.error(error);
+      console.error("Error fetching appointment details:", error);
+      alert("Failed to load appointment details. Please try again.");
     }
   };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
+  useEffect(() => {
+    if (formData.appointment_date) {
+      axios
+        .get(`http://localhost:5000/appointments/booked-slots/${formData.appointment_date}`, {
+          headers: {
+            Authorization: 'Bearer ' + localStorage.getItem("token")
+          }
+        })
+        .then((response) => {
+          const bookedSlots = response.data;
+          const slots = timeSlots.filter((slot) => !bookedSlots.includes(slot));
+          setAvailableSlots(slots);
+        })
+        .catch((error) => {
+          console.error("Error fetching booked slots:", error);
+        });
+    } else {
+      setAvailableSlots([]);
+    }
+  }, [formData.appointment_date]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -47,46 +92,115 @@ function EditAppointment() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
     try {
-      await axios.put(`http://localhost:5000/appointments/${id}`, formData);
+      await axios.put(`http://localhost:5000/appointments/update/${id}`, formData, {
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem("token")
+        }
+      });
+  
       alert("Appointment updated successfully!");
-      navigate("/appointments"); // Navigate to the appointment list page
+      navigate("/appointmentList");
+  
     } catch (error) {
       console.error("Error updating appointment:", error);
       alert("Failed to update appointment. Please try again.");
     }
   };
-
+  
   return (
-    <div>
-      <h1>Edit Your Appointment</h1>
-      <form onSubmit={handleSubmit}>
-        {/* Name Field */}
-        <label>Name</label>
-        <input type="text" name="name" value={formData.name} onChange={handleChange} required />
+    <div className="appointment-page">
+      {/* Hero Section */}
+      <div className="hero-section">
+        <img src={heroImage} alt="Appointment Hero" className="hero-image" />
+        <div className="hero-overlay">
+          <h1>Edit Your Appointment</h1>
+          <p>Choose a time slot that works best for you</p>
+        </div>
+      </div>
 
-        {/* Contact Number Field */}
-        <label>Contact No</label>
-        <input type="text" name="contact_no" value={formData.contact_no} onChange={handleChange} required />
+      {/* Appointment Form */}
+      <div className="appointment-container">
+        <h2>Edit an Appointment</h2>
+        <form onSubmit={handleSubmit} className="appointment-form">
+          <label htmlFor="name">Name</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            placeholder="Enter your name"
+            required
+          />
 
-        {/* Date Field */}
-        <label>Select Date</label>
-        <input type="date" name="appointment_date" value={formData.appointment_date} onChange={handleChange} required />
+          <label htmlFor="email">Email</label>
+          <input
+            type="text"
+            id="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            placeholder="Enter your email"
+            required
+          />
 
-        {/* Time Slot Dropdown */}
-        <label>Select Time Slot</label>
-        <select name="time_slot" value={formData.time_slot} onChange={handleChange} required>
-          <option value="">Select a time slot</option>
-          {timeSlots.map((slot, index) => (
-            <option key={index} value={slot}>
-              {slot}
-            </option>
-          ))}
-        </select>
+          <label htmlFor="contact_no">Contact No</label>
+          <input
+            type="text"
+            id="contact_no"
+            name="contact_no"
+            value={formData.contact_no}
+            onChange={handleChange}
+            placeholder="Enter your contact number"
+            required
+          />
 
-        {/* Submit Button */}
-        <button type="submit">Edit Appointment</button>
-      </form>
+          <label htmlFor="appointment_date">Select Date</label>
+          <input
+            type="date"
+            id="appointment_date"
+            name="appointment_date"
+            value={formData.appointment_date}
+            onChange={handleChange}
+            required
+          />
+
+          <label htmlFor="time_slot">Select Time Slot</label>
+          <select
+            id="time_slot"
+            name="time_slot"
+            value={formData.time_slot}
+            onChange={handleChange}
+            required
+          >
+            <option value="">Select a time slot</option>
+            {availableSlots.map((slot, index) => (
+              <option key={index} value={slot}>
+                {slot}
+              </option>
+            ))}
+          </select>
+
+          <button type="submit">Edit Appointment</button>
+        </form>
+
+        {formData.appointment_date && (
+          <div className="available-slots">
+            <h3>Available Time Slots</h3>
+            {availableSlots.length > 0 ? (
+              <ul>
+                {availableSlots.map((slot, index) => (
+                  <li key={index}>{slot}</li>
+                ))}
+              </ul>
+            ) : (
+              <p>No available slots for the selected date.</p>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

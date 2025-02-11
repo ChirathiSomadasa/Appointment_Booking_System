@@ -39,7 +39,7 @@ function App() {
           }
         />
         <Route
-          path="/appointment/edit/:id" // Dynamic route for editing appointments
+          path="/edit/:id" // Dynamic route for editing appointments
           element={
             <>
               <UseAuth />

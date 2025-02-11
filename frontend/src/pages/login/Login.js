@@ -22,25 +22,25 @@ function Login() {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-      const response = await axios.post(`http://localhost:5000/auth/login`, formData);
-      console.log("Login Response:", response.data);
-      const { token, role } = response.data;
-      localStorage.setItem("token", token);
-      localStorage.setItem("role", role);
-      if (role === "admin") {
-        navigate("/admin");
-      } else {
-        navigate("/");
-      }
-    } catch (error) {
-      console.error("Login Error:", error.response?.data || error.message);
-      alert("Login failed. Please check your credentials.");
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    const response = await axios.post("http://localhost:5000/auth/login", formData);
+    console.log("Login Response:", response.data);
+    const { token, role, user } = response.data; // Assuming the backend returns user details (name, email) along with the token
+    localStorage.setItem("token", token);
+    localStorage.setItem("role", role);
+    localStorage.setItem("user", JSON.stringify(user)); // Store user details
+    if (role === "admin") {
+      navigate("/admin");
+    } else {
+      navigate("/");
     }
-  };
+  } catch (error) {
+    console.error("Login Error:", error.response?.data || error.message);
+    alert("Login failed. Please check your credentials.");
+  }
+};
 
   return (
     <div className="login-container">

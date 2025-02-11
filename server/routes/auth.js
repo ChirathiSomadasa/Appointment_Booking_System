@@ -41,41 +41,36 @@ router.post("/register", async (req, res) => {
 });
 
 // Login user
+// Login user
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
-
   try {
-    
     // Convert email to lowercase to ensure case-insensitivity
     const normalizedEmail = email.toLowerCase();
-
     // Find user by email
     db.query("SELECT * FROM users WHERE email = ?", [normalizedEmail], (err, results) => {
       if (err) throw err;
-
       const user = results[0];
       if (!user) {
         return res.status(400).json({ message: "Invalid credentials" });
       }
-      // Log entered password and stored hashed password
-      console.log("Entered Password:", password);
-      console.log("Stored Hashed Password:", user.password_hash);
-
       // Compare password
       bcrypt.compare(password, user.password_hash, (compareErr, isMatch) => {
         if (compareErr || !isMatch) {
           return res.status(400).json({ message: "Invalid credentials" });
         }
-
         // Generate JWT token
         const token = generateJWT(user);
-
-        // Log the generated token and user role
-        console.log("Generated Token:", token);
-        console.log("User Role:", user.role);
-
-        // Return user role along with the token
-        res.json({ token, role: user.role });
+        // Return user details along with the token
+        res.json({ 
+          token, 
+          role: user.role,
+          user: {
+            id: user.id,
+            name: user.name,
+            email: user.email
+          }
+        });
       });
     });
   } catch (error) {
@@ -83,5 +78,4 @@ router.post("/login", async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
-
 module.exports = router;
