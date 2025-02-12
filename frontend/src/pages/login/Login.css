@@ -3,8 +3,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 90vh;
-  background: url('../../images/img3.jpg') no-repeat center center fixed;
+  height: 100vh;
+  background: url('../../images/login.jpg') no-repeat center center fixed;
   background-size: cover;
   position: relative;
   background-color: rgb(255, 255, 255);
@@ -81,7 +81,7 @@ input {
 }
 
 .login-btn:hover {
-  background: #0056b3;
+  background: #414141;
 }
 
 .signup-text {

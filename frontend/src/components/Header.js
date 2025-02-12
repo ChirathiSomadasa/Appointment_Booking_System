@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Notifications, Menu, Close, AccountCircle } from "@mui/icons-material";
-import "./Header.css";
 import UseLogout from "../hooks/UseLogout";
+import Logo from '../images/logo.png';
+import "./Header.css";
 
 function Header() {
   const logout = UseLogout();
@@ -19,7 +20,8 @@ function Header() {
       <div className="nav-container">
 
         <div className="nav-left">
-          <h2 className="logo">CompanyName</h2>
+          <div className="logo"> <img src={Logo} /></div>
+
           <div className="nav-links">
 
 
@@ -108,8 +110,8 @@ function Header() {
           ) : (
             <>
               {/* Show Login and Signup Buttons for Unauthenticated Users */}
-              <Link to="/register" onClick={() => setIsOpen(false)}>Signup</Link>
-              <Link to="/login" onClick={() => setIsOpen(false)}>Login</Link>
+              <Link to="/register" onClick={() => setIsOpen(false)} className="nav-item-register">Signup</Link>
+              <Link to="/login" onClick={() => setIsOpen(false)} className="nav-item-login">Login</Link>
             </>
           )}
         </div>

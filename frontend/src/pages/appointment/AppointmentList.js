@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Edit, Delete, Search, Clear } from "@mui/icons-material";
+import { showConfirmAlert, showSuccessAlert, showErrorAlert, showInfoAlert } from "../../utils/Alert"; 
 import "./AppointmentList.css";
 
 function AppointmentList() {
@@ -44,7 +45,6 @@ function AppointmentList() {
         appointment.time_slot.toLowerCase().includes(query)
       );
     });
-
     setFilteredAppointments(filtered); // Update the filtered list
   };
 
@@ -59,27 +59,35 @@ function AppointmentList() {
     navigate(`/edit/${id}`);
   };
 
-  // Handle delete button click
-  const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to cancel this appointment?")) {
-      try {
-        await axios.delete(`http://localhost:5000/appointments/delete/${id}`, {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("token"),
-          },
-        });
-        fetchAppointments();
-      } catch (error) {
-        console.error(error);
+  // Handle delete button click 
+  const handleDelete = (id) => {
+    showConfirmAlert(
+      "Are you sure?",
+      "Once Deleted, this appointment cannot be recovered!",
+      async () => {
+        try {
+          await axios.delete(`http://localhost:5000/appointments/delete/${id}`, {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+          });
+          showSuccessAlert("Deleted!", "The appointment has been deleted successfully.");
+          fetchAppointments(); // Refresh the appointment list
+        } catch (error) {
+          console.error(error);
+          showErrorAlert("Error!", "Failed to cancel the appointment.");
+        }
+      },
+      () => {
+        showInfoAlert("Canceled!", "The appointment was not deleted.");
       }
-    }
+    );
   };
 
   return (
     <div className="appointment-list-container">
       <h1>My Appointments</h1>
       <br />
-
       <div className="search-container">
         <div className="input-with-icon">
           <Search className="search-icon-inside" />
@@ -94,7 +102,6 @@ function AppointmentList() {
           <Clear /> Clear Search
         </button>
       </div>
-
       <table className="appointment-table">
         <thead>
           <tr>

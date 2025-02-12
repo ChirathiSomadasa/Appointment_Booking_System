@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
-import "./Appointment.css";
-import heroImage from "../../images/appointment.jpg";
+import { showSuccessAlert, showErrorAlert } from '../../utils/Alert';
+import "./EditAppointment.css";
 
 const timeSlots = [
   "8:00 AM - 9:00 AM",
@@ -25,13 +25,13 @@ function EditAppointment() {
     time_slot: ""
   });
   const [availableSlots, setAvailableSlots] = useState([]);
-  const [errors, setErrors] = useState({}); // State for validation errors
+  const [errors, setErrors] = useState({}); 
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchAppointmentDetails();
   }, [id]);
-
+//fetch Appointment data
   const fetchAppointmentDetails = async () => {
     try {
       const response = await axios.get(`http://localhost:5000/appointments/get/${id}`, {
@@ -40,7 +40,7 @@ function EditAppointment() {
         }
       });
       console.log("API Response:", response.data);
-      // Format the date if necessary
+
       const formattedData = {
         ...response.data,
         appointment_date: formatDate(response.data.appointment_date)
@@ -60,6 +60,7 @@ function EditAppointment() {
     return `${year}-${month}-${day}`;
   };
 
+  // Fetch available time slots when the date changes
   useEffect(() => {
     if (formData.appointment_date) {
       axios
@@ -86,7 +87,7 @@ function EditAppointment() {
 
     // Validate phone number
     if (name === "contact_no") {
-      const isValidPhone = /^[0-9]{10}$/.test(value); // Check for exactly 10 digits
+      const isValidPhone = /^[0-9]{10}$/.test(value); 
       setErrors((prevErrors) => ({
         ...prevErrors,
         contact_no: !isValidPhone ? "Phone number must be 10 digits." : ""
@@ -120,7 +121,7 @@ function EditAppointment() {
       setErrors(errors);
       return;
     }
-
+//update appointment
     try {
       await axios.put(
         `http://localhost:5000/appointments/update/${id}`,
@@ -131,110 +132,102 @@ function EditAppointment() {
           }
         }
       );
+      showSuccessAlert("Success!", "Appointment updated successfully!", () => {
+        navigate('/appointmentList');
+      });
 
-      alert("Appointment updated successfully!");
-      navigate("/appointmentList");
     } catch (error) {
       console.error("Error updating appointment:", error);
-      alert("Failed to update appointment. Please try again.");
+      showErrorAlert("Error!", "Failed to book appointment. Please try again.");
     }
   };
 
   return (
     <div className="appointment-page">
-      {/* Hero Section */}
-      <div className="hero-section">
-        <img src={heroImage} alt="Appointment Hero" className="hero-image" />
-        <div className="hero-overlay">
-          <h1>Edit Your Appointment</h1>
-          <p>Choose a time slot that works best for you</p>
-        </div>
-      </div>
-      {/* Appointment Form */}
-      <div className="appointment-container">
-        <h2>Edit an Appointment</h2>
-        <form onSubmit={handleSubmit} className="appointment-form">
-          <label htmlFor="name">Name</label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            placeholder="Enter your name"
-            required
-          />
 
-          <label htmlFor="email">Email</label>
-          <input
-            type="text"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            placeholder="Enter your email"
-            required
-          />
+    <div className="appointment-container">
+      <h2>Edit an Appointment</h2>
+      <form className="appointment-form" onSubmit={handleSubmit}>
 
-          <label htmlFor="contact_no">Contact No</label>
-          <input
-            type="text"
-            id="contact_no"
-            name="contact_no"
-            value={formData.contact_no}
-            onChange={handleChange}
-            placeholder="Enter your contact number"
-            required
-          />
-          {errors.contact_no && <span className="error">{errors.contact_no}</span>}
+        <label htmlFor="name">Name</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          value={formData.name}
+          onChange={handleChange}
+          required
+        />
 
-          <label htmlFor="appointment_date">Select Date</label>
-          <input
-            type="date"
-            id="appointment_date"
-            name="appointment_date"
-            value={formData.appointment_date}
-            onChange={handleChange}
-            min={new Date().toISOString().split("T")[0]} // Disable past dates
-            required
-          />
-          {errors.appointment_date && <span className="error">{errors.appointment_date}</span>}
+        <label htmlFor="email">Email</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+          required
+        />
 
-          <label htmlFor="time_slot">Select Time Slot</label>
-          <select
-            id="time_slot"
-            name="time_slot"
-            value={formData.time_slot}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Select a time slot</option>
-            {availableSlots.map((slot, index) => (
-              <option key={index} value={slot}>
-                {slot}
-              </option>
-            ))}
-          </select>
-          {errors.time_slot && <span className="error">{errors.time_slot}</span>}
+        <label htmlFor="contact_no">Contact No</label>
+        <input
+          type="text"
+          id="contact_no"
+          name="contact_no"
+          value={formData.contact_no}
+          onChange={handleChange}
+          required
+        />
+        {errors.contact_no && <span className="error">{errors.contact_no}</span>}
 
-          <button type="submit">Edit Appointment</button>
-        </form>
-        {formData.appointment_date && (
-          <div className="available-slots">
-            <h3>Available Time Slots</h3>
+        <label htmlFor="appointment_date">Select Date</label>
+        <input
+          type="date"
+          id="appointment_date"
+          name="appointment_date"
+          value={formData.appointment_date}
+          onChange={handleChange}
+          min={new Date().toISOString().split("T")[0]}
+          required
+        />
+        {errors.appointment_date && <span className="error">{errors.appointment_date}</span>}
+
+        <label htmlFor="time_slot">Select Time Slot</label>
+        <select
+          id="time_slot"
+          name="time_slot"
+          value={formData.time_slot}
+          onChange={handleChange}
+          required
+        >
+          <option value="">Select a time slot</option>
+          {availableSlots.map((slot, index) => (
+            <option key={index} value={slot}>
+              {slot}
+            </option>
+          ))}
+        </select>
+        {errors.time_slot && <span className="error">{errors.time_slot}</span>}
+
+        <button type="submit">Edit Appointment</button>
+      </form>
+
+      {formData.appointment_date && (
+        <div className="available-slots">
+          <h3>Available Time Slots</h3>
+          <ul>
             {availableSlots.length > 0 ? (
-              <ul>
-                {availableSlots.map((slot, index) => (
-                  <li key={index}>{slot}</li>
-                ))}
-              </ul>
+              availableSlots.map((slot, index) => (
+                <li key={index}>{slot}</li>
+              ))
             ) : (
-              <p>No available slots for the selected date.</p>
+              <li>No available slots for the selected date.</li>
             )}
-          </div>
-        )}
-      </div>
+          </ul>
+        </div>
+      )}
     </div>
+  </div>
   );
 }
 

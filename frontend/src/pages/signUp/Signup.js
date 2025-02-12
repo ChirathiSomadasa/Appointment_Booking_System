@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
-import "./Signup.css";
 import { Link, useNavigate } from "react-router-dom";
 import { IconButton } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { showSuccessAlert, showErrorAlert } from '../../utils/Alert'; 
+import "./Signup.css";
 
 function Signup() {
   const [formData, setFormData] = useState({ name: "", email: "", password: "" });
@@ -56,16 +57,18 @@ function Signup() {
 
     // Check if there are any errors before submitting
     if (Object.values(errors).some((error) => error)) {
-      alert("Please fix the errors before submitting.");
+      showErrorAlert("Error!", "Failed to register  user.", "Please check your input and try again.");
       return;
     }
 
     try {
       await axios.post(`http://localhost:5000/auth/register`, formData);
-      alert("User registered successfully");
-      navigate("/login"); // Redirect to login page
+      showSuccessAlert("Success!", "User registered successfully!", () => {
+        navigate('/login'); 
+    });
     } catch (error) {
-      alert("An error occurred. Please try again.");
+      showErrorAlert("Error!", "An error occurred. Please try again.");
+
     }
   };
 
@@ -105,13 +108,13 @@ function Signup() {
           <label>Password</label>
           <div style={{ position: "relative" }}>
             <input
-              type={showPassword ? "text" : "password"} // Toggle between 'text' and 'password'
+              type={showPassword ? "text" : "password"} 
               name="password"
               placeholder="Enter your password"
               value={formData.password}
               onChange={handleChange}
               required
-              style={{ paddingRight: "30px" }} // Add padding to avoid text overlap with the icon
+              style={{ paddingRight: "30px" }} 
             />
             <IconButton
               aria-label="toggle password visibility"

@@ -3,8 +3,8 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  height: 90vh;
-  background: url("../../images/img4.jpg") no-repeat center center/cover;
+  height: 100vh;
+  background: url("../../images/signup.jpg") no-repeat center center/cover;
   padding-right: 10%;
 }
 
@@ -16,8 +16,7 @@
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
   width: 500px;
   text-align: center;
-
-  margin-top: -80px;
+  margin-top:100px;
 }
 
 .signup-form h2 {

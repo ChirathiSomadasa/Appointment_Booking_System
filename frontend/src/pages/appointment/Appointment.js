@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import heroImage from "../../images/appointment.jpg";
 import { useNavigate } from "react-router-dom";
 import { useMemo } from "react";
 import axios from "axios";
+import { showSuccessAlert, showErrorAlert } from '../../utils/Alert';
 import "./Appointment.css";
 
 const timeSlots = [
@@ -117,24 +117,19 @@ function Appointment() {
           method: "POST"
         }
       );
-      alert("Appointment booked successfully!");
-      navigate("/appointmentList");
+      showSuccessAlert("Success!", "Appointment booked successfully!", () => {
+        navigate('/appointmentList');
+      });
+
     } catch (error) {
       console.error("Error booking appointment:", error);
-      alert("Failed to book appointment. Please try again.");
+      showErrorAlert("Error!", "Failed to book appointment. Please try again.");
+
     }
   };
 
   return (
     <div className="appointment-page">
-
-      <div className="hero-section">
-        <img src={heroImage} alt="Appointment Hero" className="hero-image" />
-        <div className="hero-overlay">
-          <h1>Book Your Appointment</h1>
-          <p>Choose a time slot that works best for you</p>
-        </div>
-      </div>
 
       <div className="appointment-container">
         <h2>Book an Appointment</h2>

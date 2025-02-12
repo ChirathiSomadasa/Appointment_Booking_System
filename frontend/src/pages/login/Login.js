@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Email, Lock, Visibility, VisibilityOff } from "@mui/icons-material";
 import { Link, useNavigate } from "react-router-dom";
+import { showSuccessAlert, showErrorAlert } from "../../utils/Alert"; 
 import "./Login.css";
 
 function Login() {
@@ -9,6 +10,7 @@ function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -17,7 +19,8 @@ function Login() {
     }));
   };
 
-  const handleTogglePasswordVisibility = () => {
+  const handleTogglePasswordVisibility = (e) => {
+    e.preventDefault(); // Prevent form submission when toggling password visibility
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
 
@@ -31,13 +34,17 @@ function Login() {
       localStorage.setItem("role", role);
       localStorage.setItem("user", JSON.stringify(user)); // Store user details
       if (role === "admin") {
-        navigate("/admin");
+        showSuccessAlert("Success!", "User logged in successfully!", () => {
+          navigate("/admin");
+        });
       } else {
-        navigate("/");
+        showSuccessAlert("Success!", "User logged in successfully!", () => {
+          navigate("/");
+      });
       }
     } catch (error) {
       console.error("Login Error:", error.response?.data || error.message);
-      alert("Login failed. Please check your credentials.");
+      showErrorAlert("Error!", "Login failed. Please check your credentials.");
     }
   };
 
@@ -70,6 +77,7 @@ function Login() {
               required
             />
             <button
+              type="button" 
               aria-label="toggle password visibility"
               onClick={handleTogglePasswordVisibility}
               className="visibility-icon"
