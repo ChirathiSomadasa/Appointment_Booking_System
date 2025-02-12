@@ -7,53 +7,101 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 function Signup() {
   const [formData, setFormData] = useState({ name: "", email: "", password: "" });
-  const [errorMessage, setErrorMessage] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+  const [errors, setErrors] = useState({ name: "", email: "", password: "" });
   const navigate = useNavigate();
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
+  const [showPassword, setShowPassword] = useState(false); // State for toggling password visibility
 
   const handleTogglePasswordVisibility = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
 
+
+  // Handle input changes and validate in real-time
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    // Update form data
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+
+    // Validate the field in real-time
+    validateField(name, value);
+  };
+
+  // Real-time validation logic
+  const validateField = (fieldName, value) => {
+    let error = "";
+
+    if (fieldName === "name") {
+      if (/\d/.test(value)) error = "Name cannot contain numbers.";
+    } else if (fieldName === "email") {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(value)) error = "Please enter a valid email address.";
+    } else if (fieldName === "password") {
+      if (value.length < 4) error = "Password must be at least 4 characters long.";
+    }
+
+    // Update the specific field's error message
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [fieldName]: error,
+    }));
+  };
+
+  // Form submission handler
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrorMessage("");
+
+    // Check if there are any errors before submitting
+    if (Object.values(errors).some((error) => error)) {
+      alert("Please fix the errors before submitting.");
+      return;
+    }
+
     try {
       await axios.post(`http://localhost:5000/auth/register`, formData);
       alert("User registered successfully");
-      navigate('/login');
+      navigate("/login"); // Redirect to login page
     } catch (error) {
-      setErrorMessage(error.response?.data.message || "An unexpected error occurred. Please try again.");
+      alert("An error occurred. Please try again.");
     }
   };
 
   return (
     <div className="signup-container">
-      <div className="signup-left">
-        
-      </div>
-      <div className="signup-right">
-        <form className="signup-form" onSubmit={handleSubmit}>
-          <h2>CREATE AN ACCOUNT</h2>
-          {errorMessage && <p className="error-message">{errorMessage}</p>}
-          <div className="form-group">
-            <label>Name</label>
-            <input type="text" name="name" placeholder="Enter your name" value={formData.name} onChange={handleChange} required />
-          </div>
-          <div className="form-group">
-            <label>Email</label>
-            <input type="email" name="email" placeholder="Enter your email" value={formData.email} onChange={handleChange} required />
-          </div>
-        
-            <div className="form-group">
+      <form className="signup-form" onSubmit={handleSubmit}>
+        <h2>CREATE AN ACCOUNT</h2>
+
+        <div className="form-group">
+          <label>Name</label>
+          <input
+            type="text"
+            name="name"
+            placeholder="Enter your name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+          />
+          {errors.name && <p className="error-message">{errors.name}</p>}
+        </div>
+
+        <div className="form-group">
+          <label>Email</label>
+          <input
+            type="email"
+            name="email"
+            placeholder="Enter your email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+          {errors.email && <p className="error-message">{errors.email}</p>}
+        </div>
+
+    
+        <div className="form-group">
           <label>Password</label>
           <div style={{ position: "relative" }}>
             <input
@@ -78,16 +126,23 @@ function Signup() {
               {showPassword ? <VisibilityOff /> : <Visibility />}
             </IconButton>
           </div>
+
+          {errors.password && <p className="error-message">{errors.password}</p>}
+        </div>
+
+        
+        <button type="submit" className="signup-btn">
+          Sign Up
+        </button>
+
        
-          </div>
-          
-          <button type="submit" className="signup-btn">Sign Up</button>
-          <br></br>
-          <br></br>
-          <br></br>
-          <p className="login-text">Already have an account? <Link to="/login" className="anchor">LOGIN</Link></p>
-        </form>
-      </div>
+        <p className="login-text">
+          Already have an account?{" "}
+          <Link to="/login" className="anchor">
+            LOGIN
+          </Link>
+        </p>
+      </form>
     </div>
   );
 }

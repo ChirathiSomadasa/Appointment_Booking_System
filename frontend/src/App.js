@@ -7,55 +7,20 @@ import Appointment from "./pages/appointment/Appointment";
 import AppointmentList from "./pages/appointment/AppointmentList";
 import EditAppointment from "./pages/appointment/EditAppointment";
 import Admin from "./pages/admin/Admin";
-import UseAuth from "./hooks/UseAuth"; 
+
 
 function App() {
   return (
     <BrowserRouter>
       <Header />
-      <Routes>
-        {/* Public Routes */}
+      <Routes>       
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
-
-        {/* Protected Routes */}
-        <Route
-          path="/appointment"
-          element={
-            <>
-              <UseAuth />
-              <Appointment />
-            </>
-          }
-        />
-        <Route
-          path="/appointmentList"
-          element={
-            <>
-              <UseAuth />
-              <AppointmentList />
-            </>
-          }
-        />
-        <Route
-          path="/edit/:id" // Dynamic route for editing appointments
-          element={
-            <>
-              <UseAuth />
-              <EditAppointment />
-            </>
-          }
-        />
-        <Route
-          path="/admin"
-          element={
-            <>
-              <UseAuth />
-              <Admin />
-            </>
-          }
-        />
+        <Route path="/appointment" element={<Appointment />} />
+        <Route path="/appointmentList" element={<AppointmentList />} />
+        <Route path="/edit/:id" element={<EditAppointment />} />
+        <Route path="/admin" element={<Admin />} />
       </Routes>
     </BrowserRouter>
   );

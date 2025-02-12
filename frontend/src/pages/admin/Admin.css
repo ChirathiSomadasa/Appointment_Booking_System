@@ -1,13 +1,12 @@
-/* AppointmentList.css */
+/* Admin.css */
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
   margin: 0;
-  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f9;
 }
 
 /* Container */
-.appointment-list-container {
+.admin-list-container {
   width: 90%;
   background: white;
   padding: 20px;
@@ -17,13 +16,24 @@ body {
   text-align: center;
 }
 
+.admin-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+h1,
+h2 {
+  text-align: center;
+  color: #333;
+}
+
 /* Search Bar */
 .search-container {
   display: flex;
   align-items: center;
   margin-bottom: 20px;
 }
-
 
 .input-with-icon {
   position: relative;
@@ -53,6 +63,7 @@ body {
   border-color: #adadad;
 }
 
+
 .clear-search-button {
   display: flex;
   align-items: center;
@@ -73,73 +84,34 @@ body {
 .appointment-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 10px;
+  margin-top: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .appointment-table th,
 .appointment-table td {
-  border: 1px solid #ddd;
-  padding: 10px;
+  padding: 12px;
   text-align: left;
+  border-bottom: 1px solid #ddd;
 }
 
 .appointment-table th {
-  background: #000000;
+  background-color: rgb(8, 142, 126);
   color: white;
 }
 
-.appointment-table tr:nth-child(even) {
-  background-color: #f2f2f2;
+.appointment-table tr:hover {
+  background-color: #f1f1f1;
 }
 
-.edit-btn,
-.delete-btn {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  padding: 5px 10px;
-  border: none;
-  cursor: pointer;
-  font-size: 14px;
-  border-radius: 5px;
-}
-
-.edit-btn {
-  background-color: #ffc107;
-  color: black;
-  margin-right: 5px;
-  text-decoration: none;
-}
-
-.delete-btn {
-  background-color: #dc3545;
-  color: white;
-}
-
-.edit-btn:hover {
-  background-color: #e0a800;
-}
-
-.delete-btn:hover {
-  background-color: #c82333;
-}
-
-/* Responsive Design */
-@media (max-width: 600px) {
-  .appointment-list-container {
-    width: 95%;
-    padding: 15px;
+@media (max-width: 768px) {
+  .appointment-table {
+    display: block;
+    overflow-x: auto;
   }
 
   .appointment-table th,
   .appointment-table td {
-    padding: 8px;
-    font-size: 14px;
-  }
-
-  .edit-btn,
-  .delete-btn {
-    font-size: 12px;
-    padding: 5px 8px;
+    white-space: nowrap;
   }
 }

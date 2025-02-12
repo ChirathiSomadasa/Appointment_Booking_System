@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
+import heroImage from "../../images/appointment.jpg";
+import { useNavigate } from "react-router-dom";
+import { useMemo } from "react";
 import axios from "axios";
 import "./Appointment.css";
-import heroImage from "../../images/img3.jpg"; 
-import { useNavigate } from 'react-router-dom';
-import { useMemo } from "react";
 
 const timeSlots = [
   "8:00 AM - 9:00 AM",
@@ -18,7 +18,6 @@ const timeSlots = [
 
 function Appointment() {
   const navigate = useNavigate();
-
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -26,9 +25,9 @@ function Appointment() {
     appointment_date: "",
     time_slot: ""
   });
-
   const [availableSlots, setAvailableSlots] = useState([]);
-  
+  const [errors, setErrors] = useState({});
+
   // Retrieve logged-in user details from localStorage
   const user = useMemo(() => JSON.parse(localStorage.getItem("user")), []);
 
@@ -37,8 +36,8 @@ function Appointment() {
     if (user) {
       setFormData((prevData) => ({
         ...prevData,
-        name: user.name || "",  // Auto-fill name
-        email: user.email || "" // Auto-fill email
+        name: user.name || "",
+        email: user.email || ""
       }));
     }
   }, [user]);
@@ -47,9 +46,9 @@ function Appointment() {
   useEffect(() => {
     if (formData.appointment_date) {
       axios
-        .get(`http://localhost:5000/appointments/booked-slots/${formData.appointment_date}`,{
+        .get(`http://localhost:5000/appointments/booked-slots/${formData.appointment_date}`, {
           headers: {
-            Authorization: 'Bearer '+ localStorage.getItem("token")
+            Authorization: "Bearer " + localStorage.getItem("token")
           }
         })
         .then((response) => {
@@ -68,6 +67,16 @@ function Appointment() {
   // Handle form input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    // Validate phone number on change
+    if (name === "contact_no") {
+      const isValidPhone = /^[0-9]{10}$/.test(value);
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        contact_no: !isValidPhone ? "Phone number must be 10 digits." : ""
+      }));
+    }
+
     setFormData((prevData) => ({
       ...prevData,
       [name]: value
@@ -78,20 +87,38 @@ function Appointment() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log(localStorage.getItem("user"));
+    // Form validation
+    const errors = {};
+    if (!formData.contact_no || !/^[0-9]{10}$/.test(formData.contact_no)) {
+      errors.contact_no = "Phone number must be 10 digits.";
+    }
+    if (!formData.appointment_date) {
+      errors.appointment_date = "Please select a valid date.";
+    }
+    if (!formData.time_slot) {
+      errors.time_slot = "Please select a time slot.";
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setErrors(errors);
+      return;
+    }
 
     try {
-      await axios.post("http://localhost:5000/appointments/create", {
-        ...formData
-      },{
-        headers:{
-          Authorization: 'Bearer '+ localStorage.getItem("token")
+      await axios.post(
+        "http://localhost:5000/appointments/create",
+        {
+          ...formData
         },
-        method: 'POST'
-      });
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token")
+          },
+          method: "POST"
+        }
+      );
       alert("Appointment booked successfully!");
       navigate("/appointmentList");
-
     } catch (error) {
       console.error("Error booking appointment:", error);
       alert("Failed to book appointment. Please try again.");
@@ -100,7 +127,7 @@ function Appointment() {
 
   return (
     <div className="appointment-page">
-      {/* Hero Section */}
+
       <div className="hero-section">
         <img src={heroImage} alt="Appointment Hero" className="hero-image" />
         <div className="hero-overlay">
@@ -109,11 +136,10 @@ function Appointment() {
         </div>
       </div>
 
-      {/* Appointment Form */}
       <div className="appointment-container">
         <h2>Book an Appointment</h2>
         <form className="appointment-form" onSubmit={handleSubmit}>
-          {/* Name Field (Auto-filled) */}
+
           <label htmlFor="name">Name</label>
           <input
             type="text"
@@ -124,7 +150,6 @@ function Appointment() {
             required
           />
 
-          {/* Email Field (Auto-filled) */}
           <label htmlFor="email">Email</label>
           <input
             type="email"
@@ -135,7 +160,6 @@ function Appointment() {
             required
           />
 
-          {/* Contact Number Field */}
           <label htmlFor="contact_no">Contact No</label>
           <input
             type="text"
@@ -145,8 +169,8 @@ function Appointment() {
             onChange={handleChange}
             required
           />
+          {errors.contact_no && <span className="error">{errors.contact_no}</span>}
 
-          {/* Date Field */}
           <label htmlFor="appointment_date">Select Date</label>
           <input
             type="date"
@@ -154,10 +178,11 @@ function Appointment() {
             name="appointment_date"
             value={formData.appointment_date}
             onChange={handleChange}
+            min={new Date().toISOString().split("T")[0]}
             required
           />
+          {errors.appointment_date && <span className="error">{errors.appointment_date}</span>}
 
-          {/* Time Slot Dropdown */}
           <label htmlFor="time_slot">Select Time Slot</label>
           <select
             id="time_slot"
@@ -173,12 +198,11 @@ function Appointment() {
               </option>
             ))}
           </select>
+          {errors.time_slot && <span className="error">{errors.time_slot}</span>}
 
-          {/* Submit Button */}
           <button type="submit">Book Appointment</button>
         </form>
 
-        {/* Display Available Time Slots */}
         {formData.appointment_date && (
           <div className="available-slots">
             <h3>Available Time Slots</h3>

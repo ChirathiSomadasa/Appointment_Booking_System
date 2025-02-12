@@ -12,7 +12,6 @@ function UseLogout (){
     // Redirect to the login page
     navigate("/login", { replace: true });
   };
-
   return logout;
 };
 

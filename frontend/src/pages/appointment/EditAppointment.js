@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import "./Appointment.css";
-import heroImage from "../../images/img3.jpg";
+import heroImage from "../../images/appointment.jpg";
 
 const timeSlots = [
   "8:00 AM - 9:00 AM",
@@ -25,6 +25,7 @@ function EditAppointment() {
     time_slot: ""
   });
   const [availableSlots, setAvailableSlots] = useState([]);
+  const [errors, setErrors] = useState({}); // State for validation errors
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -39,13 +40,11 @@ function EditAppointment() {
         }
       });
       console.log("API Response:", response.data);
-
       // Format the date if necessary
       const formattedData = {
         ...response.data,
         appointment_date: formatDate(response.data.appointment_date)
       };
-
       setFormData(formattedData);
     } catch (error) {
       console.error("Error fetching appointment details:", error);
@@ -84,6 +83,16 @@ function EditAppointment() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    // Validate phone number
+    if (name === "contact_no") {
+      const isValidPhone = /^[0-9]{10}$/.test(value); // Check for exactly 10 digits
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        contact_no: !isValidPhone ? "Phone number must be 10 digits." : ""
+      }));
+    }
+
     setFormData((prevData) => ({
       ...prevData,
       [name]: value
@@ -92,23 +101,45 @@ function EditAppointment() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
+    // Form validation
+    const errors = {};
+    if (!formData.contact_no || !/^[0-9]{10}$/.test(formData.contact_no)) {
+      errors.contact_no = "Phone number must be 10 digits.";
+    }
+    if (!formData.appointment_date) {
+      errors.appointment_date = "Please select a valid date.";
+    } else if (new Date(formData.appointment_date) < new Date()) {
+      errors.appointment_date = "Past dates are not allowed.";
+    }
+    if (!formData.time_slot) {
+      errors.time_slot = "Please select a time slot.";
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setErrors(errors);
+      return;
+    }
+
     try {
-      await axios.put(`http://localhost:5000/appointments/update/${id}`, formData, {
-        headers: {
-          Authorization: 'Bearer ' + localStorage.getItem("token")
+      await axios.put(
+        `http://localhost:5000/appointments/update/${id}`,
+        formData,
+        {
+          headers: {
+            Authorization: 'Bearer ' + localStorage.getItem("token")
+          }
         }
-      });
-  
+      );
+
       alert("Appointment updated successfully!");
       navigate("/appointmentList");
-  
     } catch (error) {
       console.error("Error updating appointment:", error);
       alert("Failed to update appointment. Please try again.");
     }
   };
-  
+
   return (
     <div className="appointment-page">
       {/* Hero Section */}
@@ -119,7 +150,6 @@ function EditAppointment() {
           <p>Choose a time slot that works best for you</p>
         </div>
       </div>
-
       {/* Appointment Form */}
       <div className="appointment-container">
         <h2>Edit an Appointment</h2>
@@ -156,6 +186,7 @@ function EditAppointment() {
             placeholder="Enter your contact number"
             required
           />
+          {errors.contact_no && <span className="error">{errors.contact_no}</span>}
 
           <label htmlFor="appointment_date">Select Date</label>
           <input
@@ -164,8 +195,10 @@ function EditAppointment() {
             name="appointment_date"
             value={formData.appointment_date}
             onChange={handleChange}
+            min={new Date().toISOString().split("T")[0]} // Disable past dates
             required
           />
+          {errors.appointment_date && <span className="error">{errors.appointment_date}</span>}
 
           <label htmlFor="time_slot">Select Time Slot</label>
           <select
@@ -182,10 +215,10 @@ function EditAppointment() {
               </option>
             ))}
           </select>
+          {errors.time_slot && <span className="error">{errors.time_slot}</span>}
 
           <button type="submit">Edit Appointment</button>
         </form>
-
         {formData.appointment_date && (
           <div className="available-slots">
             <h3>Available Time Slots</h3>

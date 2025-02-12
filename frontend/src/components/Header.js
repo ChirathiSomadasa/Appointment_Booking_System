@@ -2,29 +2,43 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Notifications, Menu, Close, AccountCircle } from "@mui/icons-material";
 import "./Header.css";
-import UseLogout from "../hooks/UseLogout"; 
+import UseLogout from "../hooks/UseLogout";
 
 function Header() {
-  const logout = UseLogout(); // Use the logout hook
+  const logout = UseLogout();
   const [isOpen, setIsOpen] = useState(false);
 
   // Check if the user is logged in by verifying the presence of a token in localStorage
   const isAuthenticated = !!localStorage.getItem("token");
 
+  // Get the user's role from localStorage
+  const userRole = localStorage.getItem("role");
+
   return (
     <nav className="navbar">
       <div className="nav-container">
-        
+
         <div className="nav-left">
           <h2 className="logo">CompanyName</h2>
           <div className="nav-links">
-            <Link to="/" className="nav-item">Home</Link>
-            <Link to="/appointment" className="nav-item">Appointment</Link>
-            <Link to="/appointmentList" className="nav-item">My Appointments</Link>
+
+
+            {/* Show Appointment and My Appointments only for customers */}
+            {isAuthenticated && userRole === "customer" && (
+              <><Link to="/" className="nav-item">Home</Link>
+                <Link to="/appointment" className="nav-item">Appointment</Link>
+                <Link to="/appointmentList" className="nav-item">My Appointments</Link>
+              </>
+            )}
+
+            {/* Show Admin Home only for admins */}
+            {isAuthenticated && userRole === "admin" && (
+              <Link to="/admin" className="nav-item">Home</Link>
+            )}
           </div>
         </div>
 
-        
+
         <div className="nav-right">
           {/* Conditional Rendering for Authenticated/Unauthenticated Users */}
           {isAuthenticated ? (
@@ -43,8 +57,8 @@ function Header() {
           ) : (
             <>
               {/* Show Login and Signup Buttons for Unauthenticated Users */}
-              <Link to="/register" className="nav-item">Signup</Link>
-              <Link to="/login" className="nav-item">Login</Link>
+              <Link to="/register" className="nav-item-register">Signup</Link>
+              <Link to="/login" className="nav-item-login">Login</Link>
             </>
           )}
         </div>
@@ -59,13 +73,29 @@ function Header() {
       {isOpen && (
         <div className="mobile-menu">
           <Link to="/" onClick={() => setIsOpen(false)}>Home</Link>
-          <Link to="/appointment" onClick={() => setIsOpen(false)}>Appointment</Link>
+
+          {/* Show Appointment and My Appointments only for customers */}
+          {isAuthenticated && userRole === "customer" && (
+            <>
+              <Link to="/appointment" onClick={() => setIsOpen(false)}>Appointment</Link>
+              <Link to="/appointmentList" onClick={() => setIsOpen(false)}>My Appointments</Link>
+            </>
+          )}
+
+          {/* Show Admin Home only for admins */}
+          {isAuthenticated && userRole === "admin" && (
+            <Link to="/admin" onClick={() => setIsOpen(false)}>Home</Link>
+          )}
 
           {/* Conditional Rendering for Mobile Menu */}
           {isAuthenticated ? (
             <>
               {/* Show Logout Button for Authenticated Users */}
-              <button onClick={logout} className="nav-item logout-btn" style={{ display: "block", width: "100%" }}>
+              <button
+                onClick={logout}
+                className="nav-item logout-btn"
+                style={{ display: "block", width: "100%" }}
+              >
                 Logout
               </button>
               <Link to="/profile" onClick={() => setIsOpen(false)}>

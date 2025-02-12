@@ -1,7 +1,7 @@
 const express = require("express");
 const db = require("../config/db");
 const router = express.Router();
-
+const { authenticate, isAdmin } = require("../middleware/authMiddleware");
 // Middleware to parse JSON
 router.use(express.json());
 
@@ -65,13 +65,13 @@ router.get("/get/:id", (req, res) => {
       if (err) return res.status(500).json({ message: "Server error" });
       if (results.length === 0) return res.status(404).json({ message: "Appointment not found" });
 
-      // Ensure the date is returned in YYYY-MM-DD format
+
       const appointment = results[0];
       if (appointment.appointment_date) {
         appointment.appointment_date = new Date(appointment.appointment_date).toISOString().split('T')[0];
       }
 
-      res.json(appointment); // Return the first result
+      res.json(appointment);
     }
   );
 });
@@ -121,4 +121,14 @@ router.get("/booked-slots/:date", (req, res) => {
     }
   );
 });
+
+// Get all appointments (Admin only)
+router.post("/get/all", authenticate, isAdmin, (req, res) => {
+
+  db.query("SELECT * FROM appointments", (err, results) => {
+    if (err) return res.status(500).json({ message: "Server error" });
+    res.json(results);
+  });
+});
+
 module.exports = router;

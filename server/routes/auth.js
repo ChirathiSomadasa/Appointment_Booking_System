@@ -41,7 +41,6 @@ router.post("/register", async (req, res) => {
 });
 
 // Login user
-// Login user
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -62,8 +61,8 @@ router.post("/login", async (req, res) => {
         // Generate JWT token
         const token = generateJWT(user);
         // Return user details along with the token
-        res.json({ 
-          token, 
+        res.json({
+          token,
           role: user.role,
           user: {
             id: user.id,
