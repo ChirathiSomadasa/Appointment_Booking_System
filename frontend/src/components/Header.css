@@ -44,7 +44,7 @@
   color: white;
   font-family: bold;
   margin-right: 20px;
-  font-size: 18px; 
+  font-size: 16px; 
   font-family: poppins;
 }
 
@@ -76,7 +76,7 @@
   padding: 8px 16px;
   border-radius: 20px;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .logout-btn:hover {

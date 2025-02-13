@@ -5,6 +5,7 @@ import { Edit, Delete, Search, Clear } from "@mui/icons-material";
 import { showConfirmAlert, showSuccessAlert, showErrorAlert, showInfoAlert } from "../../utils/Alert"; 
 import "./AppointmentList.css";
 
+
 function AppointmentList() {
   const [appointments, setAppointments] = useState([]);
   const [filteredAppointments, setFilteredAppointments] = useState([]);
@@ -121,7 +122,7 @@ function AppointmentList() {
                 <td>{appointment.name}</td>
                 <td>{appointment.email}</td>
                 <td>{appointment.contact_no}</td>
-                <td>{appointment.appointment_date.split("T")[0]}</td>
+                <td>{new Date(appointment.appointment_date).toLocaleDateString()}</td>
                 <td>{appointment.time_slot}</td>
                 <td>
                   <button onClick={() => handleEdit(appointment.id)} className="edit-btn">

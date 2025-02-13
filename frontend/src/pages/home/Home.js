@@ -1,17 +1,12 @@
 import React from 'react';
-import './Home.css';
-import {useNavigate} from 'react-router-dom';
 import WelcomeImage from '../../images/welcome.png';
 import Facility1 from '../../images/facility1.jpg';
 import Facility2 from '../../images/facility2.jpg';
 import Facility3 from '../../images/facility3.png';
+import './Home.css';
 
 function Home() {
-  const navigate = useNavigate();
 
-  function clickAppointmentButton(){
-    navigate('/appointment')
-  }
   return (
     <div>
       {/* Parallax Section */}
@@ -76,7 +71,7 @@ function Home() {
       {/* Call to Action Section */}
       <div className='cta-section'>
         <h2>Ready to Book Your Appointment?</h2>
-        <button className='cta-button'onClick={clickAppointmentButton()}>Book Now</button>
+        <button className='cta-button'>Book Now</button>
       </div>
     </div>
   );

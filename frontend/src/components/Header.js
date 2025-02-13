@@ -74,11 +74,10 @@ function Header() {
       {/* Mobile Menu */}
       {isOpen && (
         <div className="mobile-menu">
-          <Link to="/" onClick={() => setIsOpen(false)}>Home</Link>
 
           {/* Show Appointment and My Appointments only for customers */}
           {isAuthenticated && userRole === "customer" && (
-            <>
+            <><Link to="/" onClick={() => setIsOpen(false)}>Home</Link>
               <Link to="/appointment" onClick={() => setIsOpen(false)}>Appointment</Link>
               <Link to="/appointmentList" onClick={() => setIsOpen(false)}>My Appointments</Link>
             </>

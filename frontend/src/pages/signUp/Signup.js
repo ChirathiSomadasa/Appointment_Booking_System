@@ -67,7 +67,7 @@ function Signup() {
         navigate('/login'); 
     });
     } catch (error) {
-      showErrorAlert("Error!", "An error occurred. Please try again.");
+      showErrorAlert("Error!", "Failed to register  user.","User already registered.");
 
     }
   };

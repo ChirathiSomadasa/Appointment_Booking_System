@@ -65,13 +65,13 @@ router.get("/get/:id", (req, res) => {
       if (err) return res.status(500).json({ message: "Server error" });
       if (results.length === 0) return res.status(404).json({ message: "Appointment not found" });
 
-
+     
       const appointment = results[0];
       if (appointment.appointment_date) {
         appointment.appointment_date = new Date(appointment.appointment_date).toISOString().split('T')[0];
       }
 
-      res.json(appointment);
+      res.json(appointment); 
     }
   );
 });
@@ -87,7 +87,7 @@ router.put("/update/:id", (req, res) => {
     (err, results) => {
       if (err) return res.status(500).json({ message: "Server error" });
       if (results.affectedRows === 0) return res.status(404).json({ message: "Appointment not found" });
-
+console.log("Date:", appointment_date)
       res.json({ message: "Appointment updated successfully" });
     }
   );
@@ -122,9 +122,11 @@ router.get("/booked-slots/:date", (req, res) => {
   );
 });
 
+
 // Get all appointments (Admin only)
 router.post("/get/all", authenticate, isAdmin, (req, res) => {
 
+  console.log("Working...");
   db.query("SELECT * FROM appointments", (err, results) => {
     if (err) return res.status(500).json({ message: "Server error" });
     res.json(results);
