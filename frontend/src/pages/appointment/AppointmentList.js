@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Edit, Delete, Search, Clear } from "@mui/icons-material";
-import { showConfirmAlert, showSuccessAlert, showErrorAlert, showInfoAlert } from "../../utils/Alert"; 
+import { showConfirmAlert, showSuccessAlert, showErrorAlert, showInfoAlert } from "../../utils/Alert";
 import "./AppointmentList.css";
 
 

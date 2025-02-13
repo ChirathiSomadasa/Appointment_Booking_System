@@ -3,7 +3,7 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { IconButton } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { showSuccessAlert, showErrorAlert } from '../../utils/Alert'; 
+import { showSuccessAlert, showErrorAlert } from '../../utils/Alert';
 import "./Signup.css";
 
 function Signup() {
@@ -64,10 +64,10 @@ function Signup() {
     try {
       await axios.post(`http://localhost:5000/auth/register`, formData);
       showSuccessAlert("Success!", "User registered successfully!", () => {
-        navigate('/login'); 
-    });
+        navigate('/login');
+      });
     } catch (error) {
-      showErrorAlert("Error!", "Failed to register  user.","User already registered.");
+      showErrorAlert("Error!", "Failed to register  user.", "User already registered.");
 
     }
   };
@@ -103,18 +103,18 @@ function Signup() {
           {errors.email && <p className="error-message">{errors.email}</p>}
         </div>
 
-    
+
         <div className="form-group">
           <label>Password</label>
           <div style={{ position: "relative" }}>
             <input
-              type={showPassword ? "text" : "password"} 
+              type={showPassword ? "text" : "password"}
               name="password"
               placeholder="Enter your password"
               value={formData.password}
               onChange={handleChange}
               required
-              style={{ paddingRight: "30px" }} 
+              style={{ paddingRight: "30px" }}
             />
             <IconButton
               aria-label="toggle password visibility"
@@ -133,12 +133,12 @@ function Signup() {
           {errors.password && <p className="error-message">{errors.password}</p>}
         </div>
 
-        
+
         <button type="submit" className="signup-btn">
           Sign Up
         </button>
 
-       
+
         <p className="login-text">
           Already have an account?{" "}
           <Link to="/login" className="anchor">

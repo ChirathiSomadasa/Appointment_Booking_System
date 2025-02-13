@@ -25,13 +25,13 @@ function EditAppointment() {
     time_slot: ""
   });
   const [availableSlots, setAvailableSlots] = useState([]);
-  const [errors, setErrors] = useState({}); 
+  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchAppointmentDetails();
   }, [id]);
-//fetch Appointment data
+  //fetch Appointment data
   const fetchAppointmentDetails = async () => {
     try {
       const response = await axios.get(`http://localhost:5000/appointments/get/${id}`, {
@@ -87,7 +87,7 @@ function EditAppointment() {
 
     // Validate phone number
     if (name === "contact_no") {
-      const isValidPhone = /^[0-9]{10}$/.test(value); 
+      const isValidPhone = /^[0-9]{10}$/.test(value);
       setErrors((prevErrors) => ({
         ...prevErrors,
         contact_no: !isValidPhone ? "Phone number must be 10 digits." : ""
@@ -121,7 +121,7 @@ function EditAppointment() {
       setErrors(errors);
       return;
     }
-//update appointment
+    //update appointment
     try {
       await axios.put(
         `http://localhost:5000/appointments/update/${id}`,
@@ -145,89 +145,89 @@ function EditAppointment() {
   return (
     <div className="appointment-page">
 
-    <div className="appointment-container">
-      <h2>Edit an Appointment</h2>
-      <form className="appointment-form" onSubmit={handleSubmit}>
+      <div className="appointment-container">
+        <h2>Edit an Appointment</h2>
+        <form className="appointment-form" onSubmit={handleSubmit}>
 
-        <label htmlFor="name">Name</label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          required
-        />
+          <label htmlFor="name">Name</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+          />
 
-        <label htmlFor="email">Email</label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
+          <label htmlFor="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
 
-        <label htmlFor="contact_no">Contact No</label>
-        <input
-          type="text"
-          id="contact_no"
-          name="contact_no"
-          value={formData.contact_no}
-          onChange={handleChange}
-          required
-        />
-        {errors.contact_no && <span className="error">{errors.contact_no}</span>}
+          <label htmlFor="contact_no">Contact No</label>
+          <input
+            type="text"
+            id="contact_no"
+            name="contact_no"
+            value={formData.contact_no}
+            onChange={handleChange}
+            required
+          />
+          {errors.contact_no && <span className="error">{errors.contact_no}</span>}
 
-        <label htmlFor="appointment_date">Select Date</label>
-        <input
-          type="date"
-          id="appointment_date"
-          name="appointment_date"
-          value={formData.appointment_date}
-          onChange={handleChange}
-          min={new Date().toISOString().split("T")[0]}
-          required
-        />
-        {errors.appointment_date && <span className="error">{errors.appointment_date}</span>}
+          <label htmlFor="appointment_date">Select Date</label>
+          <input
+            type="date"
+            id="appointment_date"
+            name="appointment_date"
+            value={formData.appointment_date}
+            onChange={handleChange}
+            min={new Date().toISOString().split("T")[0]}
+            required
+          />
+          {errors.appointment_date && <span className="error">{errors.appointment_date}</span>}
 
-        <label htmlFor="time_slot">Select Time Slot</label>
-        <select
-          id="time_slot"
-          name="time_slot"
-          value={formData.time_slot}
-          onChange={handleChange}
-          required
-        >
-          <option value="">Select a time slot</option>
-          {availableSlots.map((slot, index) => (
-            <option key={index} value={slot}>
-              {slot}
-            </option>
-          ))}
-        </select>
-        {errors.time_slot && <span className="error">{errors.time_slot}</span>}
+          <label htmlFor="time_slot">Select Time Slot</label>
+          <select
+            id="time_slot"
+            name="time_slot"
+            value={formData.time_slot}
+            onChange={handleChange}
+            required
+          >
+            <option value="">Select a time slot</option>
+            {availableSlots.map((slot, index) => (
+              <option key={index} value={slot}>
+                {slot}
+              </option>
+            ))}
+          </select>
+          {errors.time_slot && <span className="error">{errors.time_slot}</span>}
 
-        <button type="submit">Edit Appointment</button>
-      </form>
+          <button type="submit">Edit Appointment</button>
+        </form>
 
-      {formData.appointment_date && (
-        <div className="available-slots">
-          <h3>Available Time Slots</h3>
-          <ul>
-            {availableSlots.length > 0 ? (
-              availableSlots.map((slot, index) => (
-                <li key={index}>{slot}</li>
-              ))
-            ) : (
-              <li>No available slots for the selected date.</li>
-            )}
-          </ul>
-        </div>
-      )}
+        {formData.appointment_date && (
+          <div className="available-slots">
+            <h3>Available Time Slots</h3>
+            <ul>
+              {availableSlots.length > 0 ? (
+                availableSlots.map((slot, index) => (
+                  <li key={index}>{slot}</li>
+                ))
+              ) : (
+                <li>No available slots for the selected date.</li>
+              )}
+            </ul>
+          </div>
+        )}
+      </div>
     </div>
-  </div>
   );
 }
 

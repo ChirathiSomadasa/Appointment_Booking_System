@@ -20,15 +20,18 @@ body {
   text-align: center;
   color: white;
 }
+
 .centered {
   animation: fadeIn 2s ease-in-out;
 }
+
 .centered h1 {
   font-size: 48px;
   font-weight: bold;
   margin-bottom: 10px;
   color: black;
 }
+
 .centered .subheading {
   font-size: 24px;
   font-weight: 300;
@@ -39,12 +42,14 @@ body {
   padding: 50px 20px;
   text-align: center;
 }
+
 .welcome_topic h1 {
   font-family: 'arial';
   font-size: 50px;
   color: rgb(100, 100, 100);
   margin-bottom: 30px;
 }
+
 .welcome {
   display: flex;
   flex-wrap: wrap;
@@ -52,6 +57,7 @@ body {
   gap: 30px;
   margin-top: 20px;
 }
+
 .welcome_des {
   flex: 1 1 400px;
   padding: 30px;
@@ -62,13 +68,14 @@ body {
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
+
 .welcome_photo img {
   flex: 1 1 400px;
   width: 100%;
   height: auto;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  background: linear-gradient(to bottom left, #cbf8ff 0%,  #73cbd1 100%);
+  background: linear-gradient(to bottom left, #cbf8ff 0%, #73cbd1 100%);
 }
 
 /* Facilities Section */
@@ -77,18 +84,21 @@ body {
   text-align: center;
   background-color: #f9f9f9;
 }
+
 .section-title {
   font-size: 36px;
   font-weight: bold;
   margin-bottom: 40px;
   color: #333;
 }
+
 .facilities-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 30px;
-  
+
 }
+
 .facility-card {
   background-color: white;
   padding: 20px;
@@ -96,9 +106,11 @@ body {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease-in-out;
 }
+
 .facility-card:hover {
   transform: translateY(-10px);
 }
+
 .facility-card img {
   width: 100%;
   height: 200px;
@@ -106,11 +118,13 @@ body {
   border-radius: 10px;
   margin-bottom: 15px;
 }
+
 .facility-card h3 {
   font-size: 20px;
   margin-bottom: 10px;
   color: #333;
 }
+
 .facility-card p {
   font-size: 16px;
   color: #777;
@@ -123,11 +137,13 @@ body {
   background-color: rgb(8, 133, 142);
   color: white;
 }
+
 .cta-section h2 {
   font-size: 36px;
   margin-bottom: 20px;
   color: white;
 }
+
 .cta-button {
   background-color: white;
   color: rgb(43, 175, 205);
@@ -138,6 +154,7 @@ body {
   cursor: pointer;
   transition: background-color 0.3s ease-in-out;
 }
+
 .cta-button:hover {
   background-color: rgb(43, 175, 205);
   color: white;
@@ -146,27 +163,31 @@ body {
 /* Animations */
 @keyframes fadeIn {
   from {
-      opacity: 0;
+    opacity: 0;
   }
+
   to {
-      opacity: 1;
+    opacity: 1;
   }
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
   .welcome {
-      flex-direction: column;
+    flex-direction: column;
   }
+
   .welcome_des,
   .welcome_photo img {
-      flex: 1 1 100%;
+    flex: 1 1 100%;
   }
+
   .facilities-grid {
-      grid-template-columns: 1fr;
+    grid-template-columns: 1fr;
   }
+
   .cta-button {
-      font-size: 16px;
-      padding: 12px 25px;
+    font-size: 16px;
+    padding: 12px 25px;
   }
 }
