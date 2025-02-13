@@ -7,7 +7,7 @@
     <h2>Project Description</h2>
     <p>
       This is a full-stack Appointment Booking System built with <strong>React.js</strong>, <strong>Node.js</strong>, and <strong>MySQL</strong>. 
-      The system allows users to view available time slots, book appointments, view their booked appointments, and cancel appointments. 
+      The system allows users to view available time slots, book appointments, view their booked appointments, edit and cancel appointments. 
       Optional features like user authentication and an admin panel are also implemented.
     </p>
   </section>
@@ -92,7 +92,7 @@
     <ul>
       <li><strong>Authentication</strong>: Implement JWT-based authentication for secure user sessions.</li>
       <li><strong>Admin Panel</strong>: Add an admin dashboard to view all appointments.</li>
-      <li><strong>Search and Filter</strong>: Allow users to search for specific dates or filter available slots.</li>
+      <li><strong>Search</strong>: Allow users to search for specific dates or available slots.</li>
     </ul>
   </section>
 </body>
