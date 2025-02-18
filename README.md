@@ -42,8 +42,10 @@
       <li><strong>MySQL</strong>: Relational database for storing appointment and user data.</li>
       <li><strong>Cors</strong>: Middleware for handling cross-origin requests.</li>
       <li><strong>Dotenv</strong>: For managing environment variables.</li>
-      <li><strong>Body-parser</strong>: For parsing incoming request bodies.</li>
+      <li><strong>Body-parser</strong>: Middleware for parsing incoming request bodies in Node.js and Express applications.</li>
       <li><strong>Nodemon</strong>: Automatically restarts the server during development.</li>
+      <li><strong>Jsonwebtoken (JWT)</strong>: For creating and verifying JSON Web Tokens, typically used for authentication and authorization.</li>
+      <li><strong>Bcrypt</strong>: For hashing and salting passwords securely.</li>
     </ul>
   </section>
   <section>
@@ -77,7 +79,7 @@
     <pre><code>npm init -y</code></pre>
   </li>
   <li>Install required dependencies
-    <pre><code>npm install express mysql2 cors dotenv body-parser nodemon</code></pre>
+    <pre><code>npm install express mysql2 cors dotenv body-parser nodemon bcrypt jsonwebtoken</code></pre>
   </li>
   <li>Create the database in MySQL and configure the database connection.</li>
   <li>Create a <code>.env</code> file to store environment variables such as database credentials.</li>
